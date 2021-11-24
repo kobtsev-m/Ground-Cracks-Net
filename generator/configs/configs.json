@@ -1,0 +1,27 @@
+{
+  "images_n": 120,
+  "is_random": false,
+
+  "cracks_n": 50,
+  "nx": 64,
+  "ny": 64,
+  "x0": 0,
+  "y0": 0,
+  "dx": 2,
+  "dy": 2,
+
+  "length_mean": 180.0,
+  "length_dispersion": 10.0,
+  "depth_mean": 2.0,
+  "depth_dispersion": 0.1,
+  "alpha_min": 0,
+  "alpha_max": 179,
+  "alpha_dispersion": 1.0,
+
+  "opening_angle": 0.0,
+  "dominant_frequency": 20.0,
+  "average_speed": 5000.0,
+
+  "images_file": "../../dataset/images_train.csv",
+  "labels_file": "../../dataset/labels_train.csv"
+}

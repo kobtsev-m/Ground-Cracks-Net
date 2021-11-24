@@ -1,0 +1,16 @@
+# Idea
+.idea/
+
+# C++ build
+build/
+cmake-build-debug/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+old*
+
+# Network
+weights*.json

@@ -1,0 +1,6 @@
+[submodule "generator/lib/fft"]
+	path = generator/lib/fft
+	url = https://github.com/d1vanov/Simple-FFT.git
+[submodule "generator/lib/json"]
+	path = generator/lib/json
+	url = https://github.com/nlohmann/json.git
