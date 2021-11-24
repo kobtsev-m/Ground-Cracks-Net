@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(dataset_generator)
+project(generator)
 
 set(CMAKE_CXX_STANDARD 14)
 
