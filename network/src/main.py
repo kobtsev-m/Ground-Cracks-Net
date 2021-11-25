@@ -19,15 +19,15 @@ criterion = torch.nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 # Training
-n_epochs = 150000
-for epoch in range(n_epochs):
+n_epochs = 100000
+for epoch in range(1, n_epochs + 1):
     target = model(images)
     loss = criterion(labels, target)
     loss.backward()
     optimizer.step()
     optimizer.zero_grad()
 
-    if (epoch + 1) % 10000 == 0:
-        print(f'epoch: {epoch + 1} | loss: {loss:.3f}')
+    if epoch % 5000 == 0:
+        print(f'{epoch = :<5} | {loss = :.3f}')
 
-torch.save(model, '../artifacts/model.pt')
+torch.save(model, '../artifacts/model_2.pt')

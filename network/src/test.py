@@ -13,9 +13,12 @@ labels_df = pd.read_csv('../../dataset/labels_test.csv', header=None)
 images = torch.tensor(images_df.to_numpy(), dtype=torch.float32)
 labels = torch.tensor(labels_df.to_numpy(), dtype=torch.float32)
 
-target_view = model(images).detach().view(1, -1).numpy()
-labels_view = labels.view(1, -1).numpy()
+target_view = model(images).detach().flatten()
+labels_view = labels.flatten()
 
-with np.printoptions(formatter={'float': '{:.1f}'.format}):
-    print(labels_view[0, :10])
-    print(target_view[0, :10])
+mean_fault = (labels_view - target_view).mean()
+print(f'{mean_fault = :.3f}')
+
+correct = sum(abs(x - y) < 5 for x, y in zip(labels_view, target_view))
+accuracy = correct / images.shape[0] * 100
+print(f'{accuracy = :.1f}%')
