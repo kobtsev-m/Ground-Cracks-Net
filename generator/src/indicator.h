@@ -6,6 +6,6 @@
 #include <nlohmann/json.hpp>
 #include "utils.h"
 
-cmplx*** generate_indicator(nlohmann::json);
+cmplx*** generate_indicator(json);
 
 #endif //DATASET_GENERATOR_INDICATOR_H

@@ -12,7 +12,7 @@ cmplx calculate_impulse(float nu0, cmplx w) {
     return exp(-nu*nu / (double)(nu0*nu0)) * g;
 }
 
-void generate_images(nlohmann::json configs, cmplx ***indicator) {
+void generate_images(json configs, cmplx ***indicator) {
 
     // Параметры генерации изображения
     int images_n = configs["images_n"];
@@ -36,10 +36,10 @@ void generate_images(nlohmann::json configs, cmplx ***indicator) {
     auto *py = new cmplx[ny];
 
     auto **w = create_matrix(ny, nx);
-    auto **fW = create_matrix(ny, nx);
-    auto **fInd = create_matrix(ny, nx);
-    auto **cFW = create_matrix(ny, nx);
-    auto **cF = create_matrix(ny, nx);
+    auto **fw = create_matrix(ny, nx);
+    auto **find = create_matrix(ny, nx);
+    auto **cfw = create_matrix(ny, nx);
+    auto **cf = create_matrix(ny, nx);
 
     // Открытие файлa для изображений
     ofstream images_file;
@@ -76,7 +76,7 @@ void generate_images(nlohmann::json configs, cmplx ***indicator) {
     // Подсчёт импульса в каждой точке
     for (int iy = 0; iy < ny; ++iy) {
         for (int ix = 0; ix < nx; ++ix) {
-            fW[iy][ix] = calculate_impulse(nu0, w[iy][ix]);
+            fw[iy][ix] = calculate_impulse(nu0, w[iy][ix]);
         }
     }
 
@@ -86,23 +86,23 @@ void generate_images(nlohmann::json configs, cmplx ***indicator) {
         printf("dataset: %d/%d\n", i + 1, images_n);
 
         // 2D преобразование фурье от DFN модели
-        simple_fft::FFT(indicator[i], fInd, ny, nx, error);
+        simple_fft::FFT(indicator[i], find, ny, nx, error);
 
         // Произведение фурье образа DFN модели и импульса
         for (int iy = 0; iy < ny; ++iy) {
             for (int ix = 0; ix < nx; ++ix) {
-                cFW[iy][ix] = fW[iy][ix] * fInd[iy][ix];
+                cfw[iy][ix] = fw[iy][ix] * find[iy][ix];
             }
         }
 
         // Обратное 2D преобразование фурье
-        simple_fft::IFFT(cFW, cF, ny, nx, error);
+        simple_fft::IFFT(cfw, cf, ny, nx, error);
 
         // Запись в файл (взятие целой части и модуля)
         for (int iy = 0; iy < ny; ++iy) {
             for (int ix = 0; ix < nx; ++ix) {
                 bool isLast = ix == nx - 1 && iy == ny - 1;
-                images_file << abs(cF[iy][ix].real()) << (isLast ? "" : ",");
+                images_file << abs(cf[iy][ix].real()) << (isLast ? "" : ",");
             }
         }
         images_file << "\n";
@@ -112,10 +112,10 @@ void generate_images(nlohmann::json configs, cmplx ***indicator) {
     images_file.close();
 
     // Очистка всех массивов и матриц
-    clear_matrix(cF, ny);
-    clear_matrix(cFW, ny);
-    clear_matrix(fInd, ny);
-    clear_matrix(fW, ny);
+    clear_matrix(cf, ny);
+    clear_matrix(cfw, ny);
+    clear_matrix(find, ny);
+    clear_matrix(fw, ny);
     clear_matrix(w, ny);
     clear_matrix(indicator, images_n, ny);
     delete[] py;

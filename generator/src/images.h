@@ -10,6 +10,6 @@
 #include <nlohmann/json.hpp>
 #include "utils.h"
 
-void generate_images(nlohmann::json, cmplx***);
+void generate_images(json, cmplx***);
 
 #endif //DATASET_GENERATOR_IMAGES_H

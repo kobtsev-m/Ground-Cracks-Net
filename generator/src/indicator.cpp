@@ -49,9 +49,9 @@ float rand_uniform(float min_coord, float max_coord, float average_length) {
     return rand_float(min_coord + average_length, max_coord - average_length);
 }
 
-cmplx*** generate_indicator(nlohmann::json configs) {
+cmplx*** generate_indicator(json configs) {
 
-    // Колисетво изображений
+    // Количество изображений
     int images_n = configs["images_n"];
 
     // Рандомно ли генерируется угол
@@ -75,7 +75,6 @@ cmplx*** generate_indicator(nlohmann::json configs) {
     // Значения для угла поворота
     int alpha_min = configs["alpha_min"];
     int alpha_max = configs["alpha_max"];
-    int alpha_mean;
     float alpha_dispersion = configs["alpha_dispersion"];
 
     // Массив, где хранятся значения индикаторной функции
@@ -92,7 +91,7 @@ cmplx*** generate_indicator(nlohmann::json configs) {
         printf("indicator: %d/%d\n", i + 1, images_n);
 
         // Текщий угол
-        alpha_mean = is_random ? rand_int(alpha_min, alpha_max) : i;
+        int alpha_mean = is_random ? rand_int(alpha_min, alpha_max) : i;
 
         // Заполнение нулями массива с индикаторной функцией
         for (int iy = 0; iy < ny; ++iy) {
@@ -101,17 +100,17 @@ cmplx*** generate_indicator(nlohmann::json configs) {
             }
         }
 
-        // Цикл по трещинам
+        // Итерация по трещинам
         for (int j = 0; j < cracks_n; ++j) {
-            // Равномерное распределние для координат центров
+            // Равномерное распределние для координат центра
             point pc = {
                 rand_uniform(x0, x0 + nx*dx, length_mean),
                 rand_uniform(y0, y0 + ny*dy, length_mean)
             };
-            // Генерация значения длины, ширины через распределение Гаусса
+            // Генерация значения длины и ширины через распределение Гаусса
             float length = rand_gauss(length_mean, length_dispersion);
             float depth = rand_gauss(depth_mean, depth_dispersion);
-            // Генерация угла распределение Гаусса (и перевод в радианы)
+            // Генерация угла через распределение Гаусса (и перевод в радианы)
             float alpha = rand_gauss(
                 to_radian(alpha_mean),
                 to_radian(alpha_dispersion)

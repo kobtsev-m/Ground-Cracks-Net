@@ -9,6 +9,9 @@
 // Для сокращённой запипси комплекного числа
 typedef std::complex<double> cmplx;
 
+// Для сокращённой запипси формата json
+typedef nlohmann::json json;
+
 // Для сокращённой записи координат
 struct point {
     float x, y;
@@ -18,8 +21,7 @@ cmplx** create_matrix(int, int);
 void clear_matrix(cmplx**, int);
 cmplx*** create_matrix(int, int, int);
 void clear_matrix(cmplx***, int, int);
-std::string get_path(std::string);
-nlohmann::json get_configs();
+json get_configs();
 float rand_float(float, float);
 int rand_int(int, int);
 bool rand_bool();

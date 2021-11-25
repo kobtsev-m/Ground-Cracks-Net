@@ -24,7 +24,7 @@ cmplx*** create_matrix(int n, int m, int p) {
     auto ***matrix = new cmplx **[n];
     for (int i = 0; i < n; ++i) {
         matrix[i] = new cmplx *[m];
-        for (int j = 0; j < p; ++j) {
+        for (int j = 0; j < m; ++j) {
             matrix[i][j] = new cmplx [p];
         }
     }
@@ -43,9 +43,9 @@ void clear_matrix(cmplx*** matrix, int n, int m) {
 }
 
 // Чтение конфигураций из файла
-nlohmann::json get_configs() {
+json get_configs() {
     ifstream config_file("../configs/configs.json");
-    nlohmann::json configs;
+    json configs;
     config_file >> configs;
     return configs;
 }
