@@ -24,18 +24,16 @@ def generate_images(configs, ind):
     # Средняя скорость в референтной модели
     average_speed = configs["average_speed"]
 
-    half_nx = np.floor(nx / 2)
-    half_ny = np.floor(ny / 2)
+    half_nx = int(nx / 2)
+    half_ny = int(ny / 2)
     dpx = 2.0 * np.pi / (dx * (nx - 1))
     dpy = 2.0 * np.pi / (dy * (ny - 1))
     px = np.zeros(nx)
     py = np.zeros(ny)
 
-    w = np.zeros((ny, nx))
-    fw = np.zeros((ny, nx))
-    find = np.zeros((ny, nx))
-    cfw = np.zeros((ny, nx))
-    cf = np.zeros((ny, nx))
+    w = np.zeros((ny, nx), dtype=np.complex)
+    fw = np.zeros((ny, nx), dtype=np.complex)
+    cfw = np.zeros((ny, nx), dtype=np.complex)
     images = np.zeros((images_n, ny * nx))
 
     # Заполнение px и py
@@ -72,17 +70,17 @@ def generate_images(configs, ind):
         find = np.fft.fft2(ind[i])
 
         # Произведение фурье образа DFN модели и импульса
-        for ix in range(nx):
-            for iy in range(ny):
+        for iy in range(ny):
+            for ix in range(nx):
                 cfw[iy][ix] = fw[iy][ix] * find[iy][ix]
 
         # Обратное 2D преобразование фурье
         cf = np.fft.ifft2(cfw)
 
         # Запись в файл (взятие целой части и модуля)
-        for ix in range(nx):
-            for iy in range(ny):
-                images[i][iy*ny + ix] = abs(cf[iy][ix].real())
+        for iy in range(ny):
+            for ix in range(nx):
+                images[i][iy*ny + ix] = abs(cf[iy][ix].real)
 
     # Сохранение изображений
-    pd.DataFrame(images).to_csv(configs['images_file'])
+    pd.DataFrame(images).to_csv(configs['images_file'], index=False, header=False)

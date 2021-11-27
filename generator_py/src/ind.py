@@ -54,6 +54,7 @@ def generate_indicator(configs):
 
     # Значения индикаторной функции
     indicator = np.zeros((images_n, ny, nx), dtype=np.float32)
+    labels = np.zeros((images_n, 1), dtype=int)
 
     # Итерация по изображениям
     for i in range(images_n):
@@ -86,7 +87,9 @@ def generate_indicator(configs):
                     pi = [x0 + ix*dx, y0 + iy*dy]
                     indicator[i][iy][ix] += relative_square(pi, pc, depth, length, a1, a2, dx, dy)
 
+        labels[i][0] = alpha_mean
+
     # Сохранение индикаторной функции
-    pd.DataFrame(indicator).to_csv(configs['labels_file'])
+    pd.DataFrame(labels).to_csv(configs['labels_file'], index=False, header=False)
 
     return indicator
