@@ -18,8 +18,8 @@ void generate_images(json configs, cmplx ***indicator) {
     int images_n = configs["images_n"];
     int nx = configs["nx"];
     int ny = configs["ny"];
-    float dx = configs["dx"];
-    float dy = configs["dy"];
+    int dx = configs["dx"];
+    int dy = configs["dy"];
 
     // Угол раскрытия
     float beta = configs["opening_angle"];
@@ -27,6 +27,28 @@ void generate_images(json configs, cmplx ***indicator) {
     float nu0 = configs["dominant_frequency"];
     // Средняя скорость в референтной модели
     float average_speed = configs["average_speed"];
+
+    // Зачения шагов для n, length и alpha + Их общее количество
+    string n_generating = configs["n_generating"];
+    float n_min = configs["n_min"];
+    float n_max = configs["n_max"];
+    float n_step = configs["n_step"];
+    int n_count = (n_max - n_min) / n_step + 1;
+    float length_min = configs["length_min"];
+    float length_max = configs["length_max"];
+    float length_step = configs["length_step"];
+    int length_count = (length_max - length_min) / length_step + 1;
+    int alpha_min = configs["alpha_min"];
+    int alpha_max = configs["alpha_max"];
+    float alpha_step = configs["alpha_step"];
+    int alpha_count = (alpha_max - alpha_min) / alpha_step + 1;
+
+    int images_base;
+    if (n_generating == "complex_step") {
+        images_base = n_count * length_count * alpha_count;
+    } else {
+        images_base = images_n;
+    }
 
     int half_nx = floor(nx / 2);
     int half_ny = floor(ny / 2);
@@ -66,24 +88,20 @@ void generate_images(json configs, cmplx ***indicator) {
     }
 
     // Подсчёт омега для каждого столбца индикаторной функции
+    // И подсчёт импульса в каждой точке
     for (int ix = 0; ix < nx; ++ix) {
         for (int iy = 0; iy < ny; ++iy) {
             w[iy][ix] = sqrt(py[iy]*py[iy] + px[ix]*px[ix]);
             w[iy][ix] *= (average_speed / (cos(beta) * 2.0));
-        }
-    }
-
-    // Подсчёт импульса в каждой точке
-    for (int iy = 0; iy < ny; ++iy) {
-        for (int ix = 0; ix < nx; ++ix) {
             fw[iy][ix] = calculate_impulse(nu0, w[iy][ix]);
         }
     }
 
     // Итерация по изображениям
-    for (int i = 0; i < images_n; ++i) {
+    for (int i = 0; i < images_base; i += 1) {
+
         // Вывод прогресса
-        printf("dataset: %d/%d\n", i + 1, images_n);
+        printf("images: %d/%d\n", i + 1, images_base);
 
         // 2D преобразование фурье от DFN модели
         simple_fft::FFT(indicator[i], find, ny, nx, error);
@@ -100,11 +118,15 @@ void generate_images(json configs, cmplx ***indicator) {
 
         // Запись в файл (взятие целой части и модуля)
         for (int iy = 0; iy < ny; ++iy) {
-            for (int ix = 0; ix < nx; ++ix) {
-                bool isLast = ix == nx - 1 && iy == ny - 1;
-                images_file << abs(cf[iy][ix].real()) << (isLast ? "" : ",");
+            //for (int jy = 0; jy < dy; ++jy) {
+                for (int ix = 0; ix < nx; ++ix) {
+                    //for (int jx = 0; jx < dx; ++jx) {
+                        bool is_last = (ix == nx - 1) && (iy == ny - 1);
+                        images_file << cf[iy][ix].real() << (is_last ? "" : ",");
+                    }
+                //}
             }
-        }
+        //}
         images_file << "\n";
     }
 

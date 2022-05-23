@@ -1,6 +1,7 @@
 #ifndef DATASET_GENERATOR_UTILS_H
 #define DATASET_GENERATOR_UTILS_H
 
+#include <iostream>
 #include <fstream>
 #include <random>
 #include <complex>
@@ -26,5 +27,13 @@ float rand_float(float, float);
 int rand_int(int, int);
 bool rand_bool();
 float to_radian(float);
+void resize_image(
+    int width,
+    int height,
+    int thumb_width,
+    int thumb_height,
+    double**,
+    double**
+);
 
 #endif //DATASET_GENERATOR_UTILS_H

@@ -69,3 +69,34 @@ bool rand_bool() {
 float to_radian(float angle) {
     return angle * M_PI / 180.0;
 }
+
+void resize_image(
+    int width,
+    int height,
+    int thumb_width,
+    int thumb_height,
+    double **picture_in,
+    double **picture_out
+) {
+    double xscale = thumb_width / width;
+    double yscale = thumb_height / height;
+    double yend = 0.0;
+    for (int f = 0; f < thumb_height; f++) {
+        double ystart = yend;
+        yend = (f + 1) / yscale;
+        if (yend >= height) yend = height - 1;
+        double xend = 0.0;
+        for (int g = 0; g < thumb_width; g++) {
+            double xstart = xend;
+            xend = (g + 1) / xscale;
+            if (xend >= width) xend = width - 1;
+            double sum = 0.0;
+            for (int y = (int)ystart; y <= (int)yend; ++y) {
+                for (int x = (int)xstart; x <= (int)xend; ++x) {
+                    sum += picture_in[y][x];
+                }
+            }
+            picture_out[f][g] = sum / (double)((int)yend - (int)ystart + 1) / (double)((int)xend - (int)xstart + 1);
+        }
+    }
+}

@@ -1,27 +1,41 @@
 {
-  "images_n": 100,
-  "is_random": true,
-
-  "cracks_n": 4,
-  "nx": 128,
-  "ny": 128,
+  "images_n": 1,
+  "nx": 512,
+  "ny": 512,
   "x0": 0,
   "y0": 0,
-  "dx": 2,
-  "dy": 2,
+  "dx": 20,
+  "dy": 20,
 
-  "length_mean": 50.0,
-  "length_dispersion": 2.0,
-  "depth_mean": 1.0,
-  "depth_dispersion": 0.05,
-  "alpha_min": 0,
-  "alpha_max": 179,
-  "alpha_dispersion": 1.0,
+  "depth_mean": 20.0,
+  "depth_dispersion": 0.0,
+
+  "n_generating": "complex_step",
+  "n_min": 100,
+  "n_max": 100,
+  "n_step": 1,
+  "n_mean": 50,
+  "n_dispersion": 1,
+
+  "length_generating": "complex_step",
+  "length_min": 100.0,
+  "length_max": 1000.0,
+  "length_step": 50.0,
+  "length_mean": 100.0,
+  "length_dispersion": 5.0,
+
+  "alpha_generating": "complex_step",
+  "alpha_min": 0.0,
+  "alpha_max": 179.0,
+  "alpha_step": 1.0,
+  "alpha_mean": 0.0,
+  "alpha_dispersion": 0.0,
 
   "opening_angle": 0.0,
-  "dominant_frequency": 20.0,
-  "average_speed": 2500.0,
+  "dominant_frequency": 30.0,
+  "average_speed": 3000.0,
 
-  "images_file": "../../dataset/images_train.csv",
-  "labels_file": "../../dataset/labels_train.csv"
+  "images_file": "../../dataset/21-05-22_1km-1km_train_images_5.csv",
+  "alpha_labels_file": "../../dataset/21-05-22_1km-1km_train_alpha_5.csv",
+  "length_labels_file": "../../dataset/21-05-22_1km-1km_train_length_5.csv"
 }
